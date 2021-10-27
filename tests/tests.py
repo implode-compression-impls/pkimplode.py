@@ -5,7 +5,7 @@ from pathlib import Path
 import mmap
 from secrets import token_bytes
 
-from fileTestSuite.unittest import FileTestSuiteTestCaseMixin
+from fileTestSuite.unittest import FTSTestClass, GeneratedTestProgram
 
 thisDir = Path(__file__).resolve().absolute().parent
 repoRootDir = thisDir.parent
@@ -19,9 +19,10 @@ from pkimplode import compress, compressBytesChunkedToBytes, compressStreamToByt
 from pklib_base import decodeHeader
 import pkblast
 
-class Tests(unittest.TestCase, FileTestSuiteTestCaseMixin):
-	@property
-	def fileTestSuiteDir(self) -> Path:
+
+class PkImplodeTestClass(FTSTestClass):
+	@classmethod
+	def getFileTestSuiteDir(cls) -> Path:
 		return thisDir / "testDataset"
 
 	def _testPack(self, chall: bytes, resp: bytes):
@@ -54,7 +55,6 @@ class Tests(unittest.TestCase, FileTestSuiteTestCaseMixin):
 		#	mm.seek(0)
 		#	self._testPack(mm, resp)
 
-	"""
 	def testImplodeDecoder(self):
 		for i in range(1024):
 			with self.subTest(additionalSize = i):
@@ -62,7 +62,7 @@ class Tests(unittest.TestCase, FileTestSuiteTestCaseMixin):
 				comp = self._testCompressionCorrectness(decomp)
 
 		self._testChallenge(decomp, comp)
-	"""
 
-if __name__ == '__main__':
-	unittest.main()
+
+if __name__ == "__main__":
+	GeneratedTestProgram(PkImplodeTestClass)
